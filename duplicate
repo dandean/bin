@@ -5,7 +5,20 @@
  * 
  *     $ duplicate path newFileName
  *
- * Duplicates the file at `path` as `newFileName` in the same directory
+ * Duplicates the file at `path` as `newFileName` in the same directory.
+ * Alternative to `cp path path` which can get verbose if you're not already
+ * in the target path. For example:
+ *
+ *     $ cp path/to/some/file/name.ext path/to/some/file/newname.ext
+ *     $ duplicate path/to/some/file/name.ext newname.ext
+ *
+ * TODO:
+ *
+ * - Support directory duplication
+ * - Relative paths in `newFileName`: duplication file.ext ../../newFileName.ext
+ * - Optional newFileName: auto-increment " copy N" to the end of the file
+ *     before extension, just as OSX does
+ * - CLI help: `duplicate -h` or simply `duplicate` with no arguments
 **/
 
 var fs = require('fs');
