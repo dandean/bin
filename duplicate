@@ -1,0 +1,53 @@
+#!/usr/bin/env node
+
+/**
+ * Usage:
+ * 
+ *     $ duplicate path newFileName
+ *
+ * Duplicates the file at `path` as `newFileName` in the same directory
+**/
+
+var fs = require('fs');
+
+// Simple alias methods for stderr and exit:
+var stderr = function(msg) { process.stderr.write(msg + '\n'); };
+var exit = process.exit.bind(process);
+
+// Grab the arguments
+var filePath = process.argv[2];
+var newName = process.argv[3];
+
+// Check for a file name given to duplicate:
+if (!filePath) {
+  stderr('duplicate: file path not given');
+  exit(1);
+}
+
+// Make sure the given file exists:
+var exists = fs.existsSync(filePath);
+var isFile = exists && fs.statSync(filePath).isFile();
+
+if (!isFile) {
+  stderr('duplicate: \'' + filePath + '\' is not a file')
+  exit(1);
+}
+
+// Check for a new name for the file:
+if ((newName || '').trim() == '') {
+  stderr('duplicate: new file name not given');
+  exit(1);
+}
+
+// Create the new path:
+var newPath = filePath.replace(/[\w\s.]+$/, newName);
+exists = fs.existsSync(newPath);
+
+// Make sure something doesn't already exist at that path:
+if (fs.existsSync(newPath)) {
+  stderr('duplicate: a file already exists at \'' + filePath + '\'');
+  exit(1);
+}
+
+// Copy existing file to new path:
+fs.createReadStream(filePath).pipe(fs.createWriteStream(newName));
