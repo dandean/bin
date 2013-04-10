@@ -52,7 +52,8 @@ if ((newName || '').trim() == '') {
   exit(1);
 }
 
-var directory = path.dirname(filePath);
+var absolute = path.resolve(filePath);
+var directory = path.dirname(absolute);
 var newPath;
 
 if (newName.match(/^~|\//)) {
@@ -70,4 +71,4 @@ if (fs.existsSync(newPath)) {
 }
 
 // Copy existing file to new path:
-fs.createReadStream(filePath).pipe(fs.createWriteStream(newName));
+fs.createReadStream(filePath).pipe(fs.createWriteStream(newPath));
